@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>UPSC Countdown</title>
+<style>
+body{
+    margin:0;
+    background:#111827;
+    color:white;
+    font-family:Arial,sans-serif;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+}
+
+.widget{
+    text-align:center;
+}
+
+svg{
+    width:250px;
+    height:250px;
+    transform:rotate(-90deg);
+}
+
+.bg{
+    fill:none;
+    stroke:#374151;
+    stroke-width:12;
+}
+
+.progress{
+    fill:none;
+    stroke:#60a5fa;
+    stroke-width:12;
+    stroke-linecap:round;
+}
+
+.number{
+    font-size:64px;
+    font-weight:bold;
+}
+
+.label{
+    opacity:0.8;
+}
+</style>
+</head>
+
+<body>
+
+<div class="widget">
+
+<svg>
+<circle class="bg" cx="125" cy="125" r="100"/>
+<circle class="progress" id="ring" cx="125" cy="125" r="100"/>
+</svg>
+
+<div style="margin-top:-160px">
+<div class="number" id="days"></div>
+<div class="label">DAYS TO PRELIMS</div>
+</div>
+
+</div>
+
+<script>
+
+const examDate = new Date("2027-05-23");
+const startDate = new Date("2026-06-01");
+
+const radius = 100;
+const circumference = 2 * Math.PI * radius;
+
+const ring = document.getElementById("ring");
+ring.style.strokeDasharray = circumference;
+
+function update(){
+
+    const now = new Date();
+
+    const days =
+        Math.ceil((examDate-now)/(1000*60*60*24));
+
+    document.getElementById("days").textContent =
+        Math.max(days,0);
+
+    let progress =
+        (now-startDate)/(examDate-startDate);
+
+    progress =
+        Math.max(0,Math.min(progress,1));
+
+    ring.style.strokeDashoffset =
+        circumference*(1-progress);
+}
+
+update();
+setInterval(update,1000);
+
+</script>
+
+</body>
+</html>
