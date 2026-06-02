@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UPSC 2027 • Time Blossom Dashboard</title>
+
+    <!-- Tailwind CSS for utility styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts: Lora & Tinos (highly polished Times New Roman/Liberation alternatives) and Inter for system UI -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Tinos:ital,wght@0,400;0,700;1,400;1,700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            /* Palette 1: Turquoise Harmony Accents */
+            --th-deep: #2e6583;
+            --th-mid: #3e8493;
+            --th-sage: #50a894;
+            --th-seafoam: #59c3a0;
+            --th-cream: #f2f5ce;
+
+            /* Palette 2: Soft Rainbow Ambient */
+            --sr-yellow: #fef8dd;
+            --sr-pink: #fbe3e3;
+            --sr-purple: #e3d2f8;
+            --sr-blue: #c4dcff;
+            --sr-mint: #ccf6e4;
+
+            --font-serif: 'Lora', 'Tinos', 'Times New Roman', 'Liberation Serif', Georgia, serif;
+            --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            background-color: #faf9f5;
+            /* Creating the precise drafting-grid layout from image_9b707f.jpg */
+            background-image: 
+                linear-gradient(rgba(46, 101, 131, 0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(46, 101, 131, 0.02) 1px, transparent 1px);
+            background-size: 24px 24px;
+            font-family: var(--font-sans);
+            color: #1a2226;
+            font-variant-numeric: lining-nums tabular-nums;
+            overflow-x: hidden;
+        }
+
+        .font-serif-display {
+            font-family: var(--font-serif);
+            font-variant-numeric: lining-nums tabular-nums;
+        }
+
+        /* Glassmorphism: Frosted Glass Cards with dynamic glows */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.55);
+            backdrop-filter: blur(20px) saturate(160%);
+            -webkit-backdrop-filter: blur(20px) saturate(160%);
+            border: 1px solid rgba(255, 255, 255, 0.7);
+            box-shadow: 
+                0 4px 30px rgba(46, 101, 131, 0.03),
+                inset 0 1px 1px rgba(255, 255, 255, 0.8);
+            border-radius: 24px;
+            position: relative;
+            z-index: 10;
+            transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease, border-color 0.3s ease;
+        }
+
+        .glass-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(90, 195, 160, 0.5);
+            box-shadow: 
+                0 12px 40px rgba(46, 101, 131, 0.08),
+                inset 0 1px 2px rgba(255, 255, 255, 0.9);
+        }
+
+        /* Ambient glows using Soft Rainbow behind the glass */
+        .ambient-glow {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(60px);
+            z-index: 1;
+            opacity: 0.45;
+            mix-blend-mode: multiply;
+            pointer-events: none;
+            transition: transform 1s ease-in-out;
+        }
+
+        /* Custom scrollbar alignment */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(62, 132, 147, 0.2);
+            border-radius: 99px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(62, 132, 147, 0.4);
+        }
+        
+        .toggle-arrow {
+            transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .toggle-header[aria-expanded="true"] .toggle-arrow {
+            transform: rotate(90deg);
+        }
+    </style>
+</head>
+<body class="min-h-screen py-8 px-4 md:px-8 lg:px-16 flex flex-col items-center relative">
+
+    <!-- Ambient background glows radiating Soft Rainbow hues -->
+    <div class="ambient-glow bg-[#e3d2f8] w-[400px] h-[400px] -top-20 -left-20"></div>
+    <div class="ambient-glow bg-[#c4dcff] w-[450px] h-[450px] top-[40%] right-[-100px]"></div>
+    <div class="ambient-glow bg-[#ccf6e4] w-[350px] h-[350px] bottom-[-50px] left-[15%]"></div>
+    <div class="ambient-glow bg-[#fef8dd] w-[300px] h-[300px] top-[10%] left-[45%]"></div>
+
+    <!-- Main Content Grid Wrapper -->
+    <div class="w-full max-w-6xl flex flex-col gap-8 relative z-10">
+        
+        <!-- Header Section -->
+        <header class="w-full flex flex-col md:flex-row justify-between items-start md:items-end gap-6 pb-6 border-b border-dashed border-slate-200">
+            <div class="flex flex-col gap-2.5 max-w-xl">
+                <!-- Mini Tag Pill -->
+                <div>
+                    <span class="inline-block border border-[#3e8493]/20 bg-white/70 px-4 py-1.5 rounded-full text-[10px] font-bold tracking-widest text-[#2e6583] uppercase shadow-sm">
+                        • PERSONAL MISSION · 2025 — 2027
+                    </span>
+                </div>
+                <!-- Main Header Title matching image_9b707f.jpg -->
+                <div class="flex items-baseline gap-2">
+                    <h1 class="text-7xl md:text-8xl font-bold font-serif-display tracking-tight text-[#1a2226]">
+                        UPSC
+                    </h1>
+                    <span class="text-7xl md:text-8xl font-serif-display font-light italic text-[#3e8493]/30 tracking-tight leading-none">
+                        2027
+                    </span>
+                </div>
+                <!-- Subtitle -->
+                <p class="text-xs md:text-[13px] leading-relaxed text-slate-500 font-medium max-w-lg">
+                    Discipline • Focus • Consistency • Success. A quiet page that counts down every hour standing between today and the only date that matters.
+                </p>
+            </div>
+            <!-- Dynamic Quote Panel -->
+            <div class="border-l-2 border-[#59c3a0] pl-5 py-2 max-w-xs self-start md:self-end">
+                <p class="font-serif-display italic text-base md:text-lg text-[#2e6583] leading-snug">
+                    "The harder you work today, the easier tomorrow becomes."
+                </p>
+            </div>
+        </header>
+
+        <!-- Row 1: Dual Horizontal Milestones (As seen in image_9b707f.jpg with Turquoise Harmony styling) -->
+        <section class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            
+            <!-- Left Card: Foundation Phase Ends -->
+            <div class="glass-card p-6 flex flex-col justify-between min-h-[190px] overflow-hidden relative">
+                <!-- Colored accent strip inside frosted glass -->
+                <div class="absolute top-0 left-0 w-full h-[3px] bg-gradient-to-r from-[#2e6583] to-[#59c3a0]"></div>
+                
+                <div class="flex justify-between items-start">
+                    <div>
+                        <!-- Category Badge in Turquoise accents -->
+                        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-[#ccf6e4]/60 border border-[#59c3a0]/20 text-[10px] font-bold tracking-wider text-[#2e6583] uppercase">
+                            🪧 Milestone
+                        </span>
+                        <h3 class="text-2xl md:text-3xl font-bold font-serif-display text-slate-800 mt-2">
+                            Foundation Phase Ends
+                        </h3>
+                        <p class="text-[11px] font-semibold text-[#3e8493] tracking-widest uppercase mt-1">
+                            15 September 2026
+                        </p>
+                    </div>
+                    <!-- Days Left Callout with beautiful Serif design -->
+                    <div class="text-right">
+                        <span class="block text-5xl md:text-6xl font-serif-display font-light text-[#2e6583] leading-none" id="t1-days-left">
+                            --
+                        </span>
+                        <span class="text-[9px] font-bold text-slate-400 tracking-wider uppercase mt-0.5 block">
+                            Days Left
+                        </span>
+                    </div>
+                </div>
+                
+                <!-- Bottom detail blocks structured matching image_9b707f.jpg -->
+                <div class="mt-6 flex flex-wrap gap-2 items-center text-xs text-slate-500 border-t border-slate-100/60 pt-4">
+                    <div class="flex items-center gap-1 bg-white/70 border border-slate-200/50 text-[#1a2226] font-semibold px-2.5 py-1 rounded-md text-xs shadow-sm" id="t1-wk">--</div>
+                    <span class="text-[9px] font-bold text-[#3e8493] tracking-wider uppercase mr-2">WK</span>
+                    
+                    <div class="flex items-center gap-1 bg-white/70 border border-slate-200/50 text-[#1a2226] font-semibold px-2.5 py-1 rounded-md text-xs shadow-sm" id="t1-hr">--</div>
+                    <span class="text-[9px] font-bold text-[#3e8493] tracking-wider uppercase mr-2">HR</span>
+                    
+                    <div class="flex items-center gap-1 bg-white/70 border border-slate-200/50 text-[#1a2226] font-semibold px-2.5 py-1 rounded-md text-xs shadow-sm" id="t1-min">--</div>
+                    <span class="text-[9px] font-bold text-[#3e8493] tracking-wider uppercase mr-2">MIN</span>
+                    
+                    <div class="flex items-center gap-1 bg-[#f2f5ce]/50 border border-[#f2f5ce] text-[#2e6583] font-bold px-2.5 py-1 rounded-md text-xs shadow-sm" id="t1-sec">--</div>
+                    <span class="text-[9px] font-bold text-[#3e8493] tracking-wider uppercase">SEC</span>
+                </div>
+            </div>
+
+            <!-- Right Card: UPSC Mains 2027 -->
+            <div class="glass-card p-6 flex flex-col justify-between min-h-[190px] overflow-hidden relative">
+                <!-- Soft rainbow subtle strip inside frosted glass -->
+                <div class="absolute top-0 left-0 w-full h-[3px] bg-gradient-to-r from-[#e3d2f8] to-[#c4dcff]"></div>
+                
+                <div class="flex justify-between items-start">
+                    <div>
+                        <!-- Category Badge -->
+                        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-[#e3d2f8]/60 border border-[#e3d2f8]/40 text-[10px] font-bold tracking-wider text-[#2e6583] uppercase">
+                            📝 Final Exam
+                        </span>
+                        <h3 class="text-2xl md:text-3xl font-bold font-serif-display text-slate-800 mt-2">
+                            UPSC Mains 2027
+                        </h3>
+                        <p class="text-[11px] font-semibold text-[#3e8493] tracking-widest uppercase mt-1">
+                            20 August 2027
+                        </p>
+                    </div>
+                    <!-- Days Left Big Callout -->
+                    <div class="text-right">
+                        <span class="block text-5xl md:text-6xl font-serif-display font-light text-[#2e6583] leading-none" id="t3-days-left">
+                            --
+                        </span>
+                        <span class="text-[9px] font-bold text-slate-400 tracking-wider uppercase mt-0.5 block">
+                            Days Left
+                        </span>
+                    </div>
+                </div>
+                
+                <!-- Bottom detail blocks -->
+                <div class="mt-6 flex flex-wrap gap-2 items-center text-xs text-slate-500 border-t border-slate-100/60 pt-4">
+                    <div class="flex items-center gap-1 bg-white/70 border border-slate-200/50 text-[#1a2226] font-semibold px-2.5 py-1 rounded-md text-xs shadow-sm" id="t3-wk">--</div>
+                    <span class="text-[9px] font-bold text-[#3e8493] tracking-wider uppercase mr-2">WK</span>
+                    
+                    <div class="flex items-center gap-1 bg-white/70 border border-slate-200/50 text-[#1a2226] font-semibold px-2.5 py-1 rounded-md text-xs shadow-sm" id="t3-hr">--</div>
+                    <span class="text-[9px] font-bold text-[#3e8493] tracking-wider uppercase mr-2">HR</span>
+                    
+                    <div class="flex items-center gap-1 bg-white/70 border border-slate-200/50 text-[#1a2226] font-semibold px-2.5 py-1 rounded-md text-xs shadow-sm" id="t3-min">--</div>
+                    <span class="text-[9px] font-bold text-[#3e8493] tracking-wider uppercase mr-2">MIN</span>
+                    
+                    <div class="flex items-center gap-1 bg-[#f2f5ce]/50 border border-[#f2f5ce] text-[#2e6583] font-bold px-2.5 py-1 rounded-md text-xs shadow-sm" id="t3-sec">--</div>
+                    <span class="text-[9px] font-bold text-[#3e8493] tracking-wider uppercase">SEC</span>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- Row 2: 3-Column Dashboard Grid (Exactly as image_9b707f.jpg with Turquoise Harmony Glassmorphism) -->
+        <section class="grid grid-cols-1 lg:grid-cols-3 gap-6 items-stretch">
+            
+            <!-- Column 1: Prelims 2027 Metric Breakdown -->
+            <div class="glass-card p-6 flex flex-col justify-between">
+                <div>
+                    <div class="flex justify-between items-center mb-6">
+                        <div class="flex items-center gap-2">
+                            <span class="text-xl">🎯</span>
+                            <h2 class="text-2xl font-bold font-serif-display text-[#2e6583]">Prelims 2027</h2>
+                        </div>
+                        <span class="px-2.5 py-1 rounded bg-[#ccf6e4]/50 text-[9px] font-bold text-[#2e6583] tracking-wider uppercase">
+                            Exam
+                        </span>
+                    </div>
+                    <p class="text-[11px] font-semibold text-slate-400 tracking-widest uppercase mb-6">
+                        23 May 2027
+                    </p>
+                    
+                    <!-- Stats Lines -->
+                    <div class="flex flex-col">
+                        <div class="flex justify-between items-center py-4 border-b border-slate-100/60">
+                            <span class="text-[10px] font-bold text-slate-400 tracking-widest uppercase">Days Left</span>
+                            <span class="text-3xl font-serif-display text-slate-800" id="col1-days">--</span>
+                        </div>
+                        <div class="flex justify-between items-center py-4 border-b border-slate-100/60">
+                            <span class="text-[10px] font-bold text-slate-400 tracking-widest uppercase">Weeks Left</span>
+                            <span class="text-3xl font-serif-display text-slate-800" id="col1-weeks">--</span>
+                        </div>
+                        <div class="flex justify-between items-center py-4">
+                            <span class="text-[10px] font-bold text-slate-400 tracking-widest uppercase">Study Sessions</span>
+                            <span class="text-3xl font-serif-display text-slate-800" id="col1-sessions">--</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Column 2: Elegant Circular Indicator (Refined with Turquoise Harmony Ring & Glass Lens) -->
+            <div class="glass-card p-6 flex flex-col items-center justify-between min-h-[380px] relative overflow-hidden">
+                <!-- Circular Ring Section -->
+                <div class="relative w-60 h-60 mt-4">
+                    <svg class="w-full h-full transform -rotate-90" viewBox="0 0 200 200">
+                        <!-- Custom smooth inner ring shadow mimic -->
+                        <circle cx="100" cy="100" r="86" fill="none" stroke="rgba(46, 101, 131, 0.06)" stroke-width="8"></circle>
+                        <!-- Active Turquoise Harmony progress path -->
+                        <circle cx="100" cy="100" r="86" fill="none" stroke="url(#turquoiseGrad)" stroke-width="8" stroke-dasharray="540.35" stroke-dashoffset="540.35" stroke-linecap="round" id="circle-progress-arc" class="transition-all duration-1000 ease-out"></circle>
+                        
+                        <defs>
+                            <linearGradient id="turquoiseGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stop-color="#2e6583" />
+                                <stop offset="50%" stop-color="#3e8493" />
+                                <stop offset="100%" stop-color="#59c3a0" />
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                    <!-- Floating Frosted Glass Center Content -->
+                    <div class="absolute inset-0 flex flex-col justify-center items-center text-center">
+                        <span class="text-[9px] font-bold text-slate-400 tracking-widest uppercase mb-1">
+                            Days to Prelims
+                        </span>
+                        <span class="text-7xl font-serif-display font-medium text-[#1a2226] leading-none mb-1" id="center-days">
+                            --
+                        </span>
+                        <!-- Minor live count inside lens -->
+                        <span class="text-xs font-mono font-medium text-[#2e6583] mt-1 mb-2" id="center-subtime">
+                            --h : --m : --s
+                        </span>
+                        <!-- Tiny Target Date Pill -->
+                        <span class="inline-block bg-[#f2f5ce]/60 border border-[#f2f5ce] text-[#2e6583] text-[9px] font-semibold tracking-wider px-3 py-1 rounded-full shadow-sm">
+                            23 MAY 2027
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Bottom Progress Metabar matching image_9b707f.jpg -->
+                <div class="w-full mt-6">
+                    <div class="flex justify-between text-[10px] font-bold text-[#2e6583] tracking-wider mb-2">
+                        <span>START • 01 Jan 2025</span>
+                        <span class="text-slate-800" id="metabar-percentage">--%</span>
+                        <span>PRELIMS</span>
+                    </div>
+                    <!-- Minimalist sliding loader bar with Turquoise Harmony Gradient -->
+                    <div class="w-full h-[6px] bg-slate-200/50 rounded-full overflow-hidden">
+                        <div class="h-full bg-gradient-to-r from-[#2e6583] via-[#3e8493] to-[#59c3a0] rounded-full transition-all duration-1000 ease-out" style="width: 0%;" id="linear-progress-bar"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Column 3: Mains 2027 Metric Breakdown -->
+            <div class="glass-card p-6 flex flex-col justify-between">
+                <div>
+                    <div class="flex justify-between items-center mb-6">
+                        <div class="flex items-center gap-2">
+                            <span class="text-xl">📝</span>
+                            <h2 class="text-2xl font-bold font-serif-display text-[#2e6583]">Mains 2027</h2>
+                        </div>
+                        <span class="px-2.5 py-1 rounded bg-[#e3d2f8]/50 text-[9px] font-bold text-[#2e6583] tracking-wider uppercase">
+                            Exam
+                        </span>
+                    </div>
+                    <p class="text-[11px] font-semibold text-slate-400 tracking-widest uppercase mb-6">
+                        20 August 2027
+                    </p>
+                    
+                    <!-- Stats Lines -->
+                    <div class="flex flex-col">
+                        <div class="flex justify-between items-center py-4 border-b border-slate-100/60">
+                            <span class="text-[10px] font-bold text-slate-400 tracking-widest uppercase">Days Left</span>
+                            <span class="text-3xl font-serif-display text-slate-800" id="col3-days">--</span>
+                        </div>
+                        <div class="flex justify-between items-center py-4 border-b border-slate-100/60">
+                            <span class="text-[10px] font-bold text-slate-400 tracking-widest uppercase">Weeks Left</span>
+                            <span class="text-3xl font-serif-display text-slate-800" id="col3-weeks">--</span>
+                        </div>
+                        <div class="flex justify-between items-center py-4">
+                            <span class="text-[10px] font-bold text-slate-400 tracking-widest uppercase">After Prelims</span>
+                            <span class="text-3xl font-serif-display text-slate-800 text-[#2e6583]" id="col3-after">-- days</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- Row 3: Huge Live Counter Grid Blocks (As seen in image_9b70a1.jpg with Glassmorphism) -->
+        <section class="grid grid-cols-2 md:grid-cols-4 gap-4">
+            
+            <!-- Days Box -->
+            <div class="glass-card p-5 flex flex-col justify-between min-h-[120px]">
+                <span class="text-[9px] font-bold text-slate-400 tracking-widest uppercase">
+                    Days
+                </span>
+                <span class="text-5xl md:text-6xl font-serif-display text-slate-800 leading-none mt-2" id="block-days">
+                    --
+                </span>
+            </div>
+
+            <!-- Hours Box -->
+            <div class="glass-card p-5 flex flex-col justify-between min-h-[120px]">
+                <span class="text-[9px] font-bold text-slate-400 tracking-widest uppercase">
+                    Hours
+                </span>
+                <span class="text-5xl md:text-6xl font-serif-display text-slate-800 leading-none mt-2" id="block-hours">
+                    --
+                </span>
+            </div>
+
+            <!-- Minutes Box -->
+            <div class="glass-card p-5 flex flex-col justify-between min-h-[120px]">
+                <span class="text-[9px] font-bold text-slate-400 tracking-widest uppercase">
+                    Minutes
+                </span>
+                <span class="text-5xl md:text-6xl font-serif-display text-slate-800 leading-none mt-2" id="block-minutes">
+                    --
+                </span>
+            </div>
+
+            <!-- Seconds Box with pulsating Live element -->
+            <div class="glass-card p-5 flex flex-col justify-between min-h-[120px] relative">
+                <div class="flex justify-between items-start">
+                    <span class="text-[9px] font-bold text-slate-400 tracking-widest uppercase">
+                        Seconds
+                    </span>
+                    <span class="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-[#fbe3e3] border border-[#fbe3e3]/40 text-[8px] font-extrabold text-[#2e6583] tracking-wider uppercase animate-pulse">
+                        ● Live
+                    </span>
+                </div>
+                <span class="text-5xl md:text-6xl font-serif-display text-[#2e6583] leading-none mt-2" id="block-seconds">
+                    --
+                </span>
+            </div>
+
+        </section>
+
+        <!-- Row 4: Notion-style Expandable Toggle Panels (Recreated meticulously) -->
+        <section class="flex flex-col gap-3">
+            
+            <!-- Toggle Block 1 -->
+            <div class="glass-card overflow-hidden">
+                <button class="w-full flex items-center gap-3 px-6 py-4 text-left font-medium text-[#2e6583] select-none hover:bg-white/30 toggle-header" 
+                        onclick="toggleAccordion('acc-1', this)" 
+                        aria-expanded="false">
+                    <!-- Triangle Arrow -->
+                    <span class="text-[10px] text-slate-400 toggle-arrow">▶</span>
+                    <span class="text-base flex items-center gap-2 font-medium">
+                        🗓️ <span class="hover:underline">Why these dates?</span>
+                    </span>
+                </button>
+                <div id="acc-1" class="hidden px-6 pb-5 pt-1 text-sm text-slate-600 leading-relaxed border-t border-slate-100/40 bg-white/20">
+                    <p class="max-w-3xl">
+                        UPSC Civil Services Preliminary Examination is scheduled for <strong>23 May 2027</strong>. The Mains examination begins <strong>20 August 2027</strong>. Both dates are anchors — every plan, sprint, and revision cycle bends around them.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Toggle Block 2 -->
+            <div class="glass-card overflow-hidden">
+                <button class="w-full flex items-center gap-3 px-6 py-4 text-left font-medium text-[#2e6583] select-none hover:bg-white/30 toggle-header" 
+                        onclick="toggleAccordion('acc-2', this)" 
+                        aria-expanded="false">
+                    <!-- Triangle Arrow -->
+                    <span class="text-[10px] text-slate-400 toggle-arrow">▶</span>
+                    <span class="text-base flex items-center gap-2 font-medium">
+                        🧭 <span class="hover:underline">The only three rules</span>
+                    </span>
+                </button>
+                <div id="acc-2" class="hidden px-6 pb-5 pt-1 text-sm text-slate-600 leading-relaxed border-t border-slate-100/40 bg-white/20">
+                    <ul class="list-decimal list-inside space-y-3 max-w-3xl">
+                        <li>
+                            <strong class="text-slate-800">Review core material systematically</strong>: Concepts are the structural pillars. Devote undisturbed blocks every morning to deep static study.
+                        </li>
+                        <li>
+                            <strong class="text-slate-800">Undergo timed evaluations</strong>: Practicing in simulated exam conditions builds the rapid decision-making muscles required on exam day.
+                        </li>
+                        <li>
+                            <strong class="text-slate-800">Maintain routine discipline</strong>: Consistency trumps short bursts of intensive efforts. Cultivate daily habits that support long-term endurance.
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+        </section>
+
+    </div>
+
+    <script>
+        // Anchors and Deadlines matching image_9b707f.jpg constraints
+        const baselineStart = new Date("2025-01-01T00:00:00").getTime();
+        const targetFoundation = new Date("2026-09-15T00:00:00").getTime();
+        const targetPrelims = new Date("2027-05-23T00:00:00").getTime();
+        const targetMains = new Date("2027-08-20T00:00:00").getTime();
+
+        // Standard dynamic number formatter
+        function formatNumber(num) {
+            return num < 10 ? '0' + num : num;
+        }
+
+        // Accordion Toggle handler
+        function toggleAccordion(id, btn) {
+            const container = document.getElementById(id);
+            const isExpanded = btn.getAttribute('aria-expanded') === 'true';
+            
+            if (isExpanded) {
+                container.classList.add('hidden');
+                btn.setAttribute('aria-expanded', 'false');
+            } else {
+                container.classList.remove('hidden');
+                btn.setAttribute('aria-expanded', 'true');
+            }
+        }
+
+        // Real-time Timer calculations Engine
+        function runTimer() {
+            const now = new Date().getTime();
+
+            // 1. Foundation Phase calculations (Target 1)
+            const diffT1 = targetFoundation - now;
+            if (diffT1 > 0) {
+                const daysT1 = Math.floor(diffT1 / (1000 * 60 * 60 * 24));
+                const weeksT1 = Math.floor(daysT1 / 7);
+                const hrsT1 = Math.floor((diffT1 % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minsT1 = Math.floor((diffT1 % (1000 * 60 * 60)) / (1000 * 60));
+                const secsT1 = Math.floor((diffT1 % (1000 * 60)) / 1000);
+
+                document.getElementById('t1-days-left').textContent = daysT1;
+                document.getElementById('t1-wk').textContent = formatNumber(weeksT1);
+                document.getElementById('t1-hr').textContent = formatNumber(hrsT1);
+                document.getElementById('t1-min').textContent = formatNumber(minsT1);
+                document.getElementById('t1-sec').textContent = formatNumber(secsT1);
+            } else {
+                document.getElementById('t1-days-left').textContent = '0';
+                document.getElementById('t1-wk').textContent = '00';
+                document.getElementById('t1-hr').textContent = '00';
+                document.getElementById('t1-min').textContent = '00';
+                document.getElementById('t1-sec').textContent = '00';
+            }
+
+            // 2. Prelims 2027 calculations (Target 2)
+            const diffT2 = targetPrelims - now;
+            let daysT2 = 0, hrsT2 = 0, minsT2 = 0, secsT2 = 0;
+            if (diffT2 > 0) {
+                daysT2 = Math.floor(diffT2 / (1000 * 60 * 60 * 24));
+                hrsT2 = Math.floor((diffT2 % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                minsT2 = Math.floor((diffT2 % (1000 * 60 * 60)) / (1000 * 60));
+                secsT2 = Math.floor((diffT2 % (1000 * 60)) / 1000);
+
+                const weeksT2 = Math.floor(daysT2 / 7);
+                const sessionMultiplier = 2; // Simulated study slots metric
+
+                // Left Column Metrics
+                document.getElementById('col1-days').textContent = daysT2;
+                document.getElementById('col1-weeks').textContent = weeksT2;
+                document.getElementById('col1-sessions').textContent = daysT2 * sessionMultiplier;
+
+                // Circular visual indicators
+                document.getElementById('center-days').textContent = daysT2;
+                document.getElementById('center-subtime').textContent = `${formatNumber(hrsT2)}h : ${formatNumber(minsT2)}m : ${formatNumber(secsT2)}s`;
+
+                // Live bottom grid boxes
+                document.getElementById('block-days').textContent = daysT2;
+                document.getElementById('block-hours').textContent = formatNumber(hrsT2);
+                document.getElementById('block-minutes').textContent = formatNumber(minsT2);
+                document.getElementById('block-seconds').textContent = formatNumber(secsT2);
+            } else {
+                document.getElementById('col1-days').textContent = '0';
+                document.getElementById('col1-weeks').textContent = '0';
+                document.getElementById('col1-sessions').textContent = '0';
+                document.getElementById('center-days').textContent = '0';
+                document.getElementById('center-subtime').textContent = '00h : 00m : 00s';
+                document.getElementById('block-days').textContent = '0';
+                document.getElementById('block-hours').textContent = '00';
+                document.getElementById('block-minutes').textContent = '00';
+                document.getElementById('block-seconds').textContent = '00';
+            }
+
+            // 3. Mains 2027 calculations (Target 3)
+            const diffT3 = targetMains - now;
+            if (diffT3 > 0) {
+                const daysT3 = Math.floor(diffT3 / (1000 * 60 * 60 * 24));
+                const weeksT3 = Math.floor(daysT3 / 7);
+                const hrsT3 = Math.floor((diffT3 % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minsT3 = Math.floor((diffT3 % (1000 * 60 * 60)) / (1000 * 60));
+                const secsT3 = Math.floor((diffT3 % (1000 * 60)) / 1000);
+
+                document.getElementById('t3-days-left').textContent = daysT3;
+                document.getElementById('t3-wk').textContent = formatNumber(weeksT3);
+                document.getElementById('t3-hr').textContent = formatNumber(hrsT3);
+                document.getElementById('t3-min').textContent = formatNumber(minsT3);
+                document.getElementById('t3-sec').textContent = formatNumber(secsT3);
+
+                // Right Column Metrics
+                document.getElementById('col3-days').textContent = daysT3;
+                document.getElementById('col3-weeks').textContent = weeksT3;
+                
+                const gapMs = targetMains - targetPrelims;
+                const gapDays = Math.ceil(gapMs / (1000 * 60 * 60 * 24));
+                document.getElementById('col3-after').textContent = `${gapDays} days`;
+            } else {
+                document.getElementById('t3-days-left').textContent = '0';
+                document.getElementById('t3-wk').textContent = '00';
+                document.getElementById('t3-hr').textContent = '00';
+                document.getElementById('t3-min').textContent = '00';
+                document.getElementById('t3-sec').textContent = '00';
+                document.getElementById('col3-days').textContent = '0';
+                document.getElementById('col3-weeks').textContent = '0';
+                document.getElementById('col3-after').textContent = '0 days';
+            }
+
+            // 4. Progress Metabar & Ring updates (Using base starting timeline starting Jan 1, 2025)
+            const totalPrepDuration = targetPrelims - baselineStart;
+            const elapsedPrep = now - baselineStart;
+            let ratio = elapsedPrep / totalPrepDuration;
+            ratio = Math.max(0, Math.min(1, ratio)); // Keep ratio clamped safely between 0-1
+
+            const percentage = (ratio * 100).toFixed(2);
+            document.getElementById('metabar-percentage').textContent = `${percentage}%`;
+            document.getElementById('linear-progress-bar').style.width = `${percentage}%`;
+
+            // SVG Arc Calculation (Circle Radius 86) -> 2 * Math.PI * 86 = 540.35
+            const circumference = 540.35;
+            const offset = circumference * (1 - ratio);
+            document.getElementById('circle-progress-arc').style.strokeDashoffset = offset;
+        }
+
+        // Initialize engine instantly
+        runTimer();
+        setInterval(runTimer, 1000);
+    </script>
+</body>
+</html>
