@@ -184,6 +184,26 @@
                     </div>
                 </div>
                 
+<!-- Foundation Progress -->
+<div class="mt-5">
+    <div class="flex justify-between items-center mb-2">
+        <span class="text-[9px] font-bold tracking-widest uppercase text-[#3e8493]">
+            Progress
+        </span>
+        <span id="foundation-percentage"
+              class="text-[10px] font-bold text-[#2e6583]">
+            --%
+        </span>
+    </div>
+
+    <div class="w-full h-[5px] bg-slate-200/50 rounded-full overflow-hidden">
+        <div
+            id="foundation-progress-bar"
+            class="h-full bg-gradient-to-r from-[#59c3a0] to-[#2e6583] rounded-full transition-all duration-1000"
+            style="width:0%">
+        </div>
+    </div>
+</div>
                 <!-- Bottom detail blocks structured matching image_9b707f.jpg -->
                 <div class="mt-6 flex flex-wrap gap-2 items-center text-xs text-slate-500 border-t border-slate-100/60 pt-4">
                     <div class="flex items-center gap-1 bg-white/70 border border-slate-200/50 text-[#1a2226] font-semibold px-2.5 py-1 rounded-md text-xs shadow-sm" id="t1-wk">--</div>
@@ -229,6 +249,26 @@
                     </div>
                 </div>
                 
+<!-- Mains Progress -->
+<div class="mt-5">
+    <div class="flex justify-between items-center mb-2">
+        <span class="text-[9px] font-bold tracking-widest uppercase text-[#3e8493]">
+            Progress
+        </span>
+        <span id="mains-percentage"
+              class="text-[10px] font-bold text-[#2e6583]">
+            --%
+        </span>
+    </div>
+
+    <div class="w-full h-[5px] bg-slate-200/50 rounded-full overflow-hidden">
+        <div
+            id="mains-progress-bar"
+            class="h-full bg-gradient-to-r from-[#e3d2f8] via-[#c4dcff] to-[#2e6583] rounded-full transition-all duration-1000"
+            style="width:0%">
+        </div>
+    </div>
+</div>
                 <!-- Bottom detail blocks -->
                 <div class="mt-6 flex flex-wrap gap-2 items-center text-xs text-slate-500 border-t border-slate-100/60 pt-4">
                     <div class="flex items-center gap-1 bg-white/70 border border-slate-200/50 text-[#1a2226] font-semibold px-2.5 py-1 rounded-md text-xs shadow-sm" id="t3-wk">--</div>
@@ -604,6 +644,45 @@
             const percentage = (ratio * 100).toFixed(2);
             document.getElementById('metabar-percentage').textContent = `${percentage}%`;
             document.getElementById('linear-progress-bar').style.width = `${percentage}%`;
+
+// FOUNDATION PROGRESS
+const foundationRatio = Math.max(
+    0,
+    Math.min(
+        1,
+        (now - baselineStart) /
+        (targetFoundation - baselineStart)
+    )
+);
+
+const foundationPercentage =
+    (foundationRatio * 100).toFixed(2);
+
+document.getElementById('foundation-percentage').textContent =
+    `${foundationPercentage}%`;
+
+document.getElementById('foundation-progress-bar').style.width =
+    `${foundationPercentage}%`;
+
+
+
+// MAINS PROGRESS
+const mainsRatio = Math.max(
+    0,
+    Math.min(
+        1,
+        (now - baselineStart) /
+        (targetMains - baselineStart)
+    )
+);
+
+const mainsPercentage = (mainsRatio * 100).toFixed(2);
+
+document.getElementById('mains-percentage').textContent =
+    `${mainsPercentage}%`;
+
+document.getElementById('mains-progress-bar').style.width =
+    `${mainsPercentage}%`;
 
             // SVG Arc Calculation (Circle Radius 86) -> 2 * Math.PI * 86 = 540.35
             const circumference = 540.35;
